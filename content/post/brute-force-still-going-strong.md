@@ -35,5 +35,7 @@ iptables -A INPUT -p tcp -s your-ip/32 --destination-port 22 -j ACCEPT
 iptables -A INPUT -p tcp -s 0.0.0.0/0 --destination-port 80 -j ACCEPT
 iptables -A INPUT -p tcp -s 0.0.0.0/0 --destination-port 443 -j ACCEPT
 
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
 iptables -A INPUT -j REJECT  # reject everything else
 {{< /highlight >}}
