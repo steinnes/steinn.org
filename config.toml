@@ -1,0 +1,9 @@
+baseurl = "http://steinn.org"
+languageCode = "en-us"
+title = "steinn.org"
+
+[[menu.main]]
+    name = "about"
+    weight = -10
+    identifier = "about"
+    url = "/about/"
