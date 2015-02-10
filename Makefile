@@ -2,11 +2,9 @@ blog:
 	hugo
 
 push: blog
-	git add -A
-	git commit -a -m 'rebuilding site'
-	git push origin master
-	git subtree push --prefix=public git@github.com:steinnes/steinnes.github.io.git gh-pages
-
+	cd public && git add -A
+	cd public && git commit -a -m 'rebuilding site'
+	cd public && git push origin master
 
 server:
 	hugo server --buildDrafts --watch
