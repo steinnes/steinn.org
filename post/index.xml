@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on steinn.org</title>
+    <link>http://steinn.org/post/</link>
+    <description>Recent content in Posts on steinn.org</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 10 Feb 2015 11:44:14 +0000</lastBuildDate>
+    <atom:link href="http://steinn.org/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>From Monolith to Services @ QuizUp</title>
+      <link>http://steinn.org/post/utmessan2015/</link>
+      <pubDate>Tue, 10 Feb 2015 11:44:14 +0000</pubDate>
+      
+      <guid>http://steinn.org/post/utmessan2015/</guid>
+      <description>&lt;p&gt;Last week I had a talk at a local IT conference, &lt;a
+href=&#34;https://www.utmessan.is&#34;&gt;UT Messan&lt;/a&gt;.  The title of my talk was the
+rather inflated &amp;ldquo;From Monolith to Services at Scale: How QuizUp is making the
+(inevitable?) transition, one endpoint at a time&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;In the talk I try to tell the story of how we at QuizUp are transitioning to
+a more service-oriented architecture, and which steps we decided to take first.&lt;/p&gt;
+
+&lt;p&gt;The route we chose was to setup ZooKeeper as the heart of our system for
+service registration, discovery and configuration, and then figure out how to
+route client requests to services running inside Docker containers.  The
+building blocks we ended up using were basically ZooKeeper, NGiNX, Docker, our
+own Docker registries (which we refer to as &amp;ldquo;dockistries&amp;rdquo;), as well as a few
+custom components which I outline in the talk.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;embed video-player&#34;&gt;
+&lt;iframe class=&#34;youtube-player&#34; type=&#34;text/html&#34; width=&#34;940&#34; height=&#34;480&#34; src=&#34;http://www.youtube.com/embed/GhgH_8-HCVQ&#34; allowfullscreen frameborder=&#34;0&#34;&gt;
+&lt;/iframe&gt;
+&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Here are just slightly updated slides, I didn&amp;rsquo;t manage to get them to the
+conference technician in time on Friday, but I put the tweaked version on
+Speakerdeck.
+&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;a36212c2dcc8418290d98ec6b9c0c8a1&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
+&lt;/p&gt;
+
+&lt;p&gt;I would have liked to tell a bit more of a story, as we did create a couple
+of services in the spring of 2014 which we always had issues deploying, and
+we realized that without standardized containers, a service registry and why
+not a dynamic router as well &amp;ndash; we&amp;rsquo;d probably just confuse ourselves into
+unexpected outages.  However my timeslot for this talk was only 30 minutes
+so I condensed this into 20-25 + questions.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
