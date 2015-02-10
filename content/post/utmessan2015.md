@@ -34,7 +34,7 @@ I would have liked to tell a bit more of a story, as we did create a couple
 of services in the spring of 2014 which we always had issues deploying. After
 some pondering we realized that without some kind of deployable packages (we
 rolled our own, and also looked at using .deb), or standardized containers,
-a service registry we would probably end up with a lot of confusion (and
+and a service registry we would probably end up with a lot of confusion (and
 unexpected outages).  We decided on ZooKeeper, Docker and since we're doing
 that why not a dynamic router as well.
 
