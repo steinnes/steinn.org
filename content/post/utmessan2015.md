@@ -1,6 +1,5 @@
 +++
 date = "2015-02-10T11:44:14Z"
-draft = true
 title = "From Monolith to Services @ QuizUp"
 type = "post"
 
@@ -28,3 +27,9 @@ conference technician in time on Friday, but I put the tweaked version on
 Speakerdeck.
 {{% speakerdeck a36212c2dcc8418290d98ec6b9c0c8a1 %}}
 
+I would have liked to tell a bit more of a story, as we did create a couple
+of services in the spring of 2014 which we always had issues deploying, and
+we realized that without standardized containers, a service registry and why
+not a dynamic router as well -- we'd probably just confuse ourselves into
+unexpected outages.  However my timeslot for this talk was only 30 minutes
+so I condensed this into 20-25 + questions.
