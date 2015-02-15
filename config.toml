@@ -1,4 +1,4 @@
-baseurl = "http://steinnes.github.io"
+baseurl = "http://steinn.org"
 languageCode = "en-us"
 title = "steinn.org"
 theme = "lakkris"
