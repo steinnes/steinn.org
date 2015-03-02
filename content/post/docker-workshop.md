@@ -27,11 +27,11 @@ docker client to create new images, and start them.  The images are created
 using recipe files called "Dockerfiles", which look something like this:
 
 {{< highlight docker >}}
-    FROM debian
-    ENV DEBIAN_FRONTEND noninteractive
-    RUN apt-get update && apt-get install -y openssh-server
-    ADD authorized_keys /root/.ssh/authorized_keys
-    CMD mkdir -p /var/run/sshd && exec /usr/sbin/sshd -D
+FROM debian
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update && apt-get install -y openssh-server
+ADD authorized_keys /root/.ssh/authorized_keys
+CMD mkdir -p /var/run/sshd && exec /usr/sbin/sshd -D
 {{< /highlight >}}
 
 If situated in a folder with a file called `Dockerfile` with the contents
@@ -39,26 +39,26 @@ from above, we can build an image based on it using the docker command line
 client:
 
 {{< highlight bash >}}
-    $ docker build -t steinn/ssh-docker-1 .
-    Sending build context to Docker daemon  2.56 kB
-    Sending build context to Docker daemon
-    Step 0 : FROM debian
-     ---> 61f7f4f722fb
-    Step 1 : ENV DEBIAN_FRONTEND noninteractive
-     ---> Running in 18c5aa0fa614
-     ---> f7fb51a8a0ec
-    Removing intermediate container 18c5aa0fa614
-    Step 2 : RUN apt-get update && apt-get install -y openssh-server
-     ---> Running in efcaf53c9380
-    Get:1 http://http.debian.net wheezy Release.gpg [1655 B]
-    .... VERY LONG PRINTOUT SUPPRESSED ....
-     ---> 6172db1d263d
-    Removing intermediate container efcaf53c9380
-    Step 3 : CMD mkdir -p /var/run/sshd && exec /usr/sbin/sshd -D
-     ---> Running in 446fb44be23e
-     ---> 914c4e3e928b
-    Removing intermediate container 446fb44be23e
-    Successfully built 914c4e3e928b
+$ docker build -t steinn/ssh-docker-1 .
+Sending build context to Docker daemon  2.56 kB
+Sending build context to Docker daemon
+Step 0 : FROM debian
+---> 61f7f4f722fb
+Step 1 : ENV DEBIAN_FRONTEND noninteractive
+---> Running in 18c5aa0fa614
+---> f7fb51a8a0ec
+Removing intermediate container 18c5aa0fa614
+Step 2 : RUN apt-get update && apt-get install -y openssh-server
+---> Running in efcaf53c9380
+Get:1 http://http.debian.net wheezy Release.gpg [1655 B]
+.... VERY LONG PRINTOUT SUPPRESSED ....
+---> 6172db1d263d
+Removing intermediate container efcaf53c9380
+Step 3 : CMD mkdir -p /var/run/sshd && exec /usr/sbin/sshd -D
+---> Running in 446fb44be23e
+---> 914c4e3e928b
+Removing intermediate container 446fb44be23e
+Successfully built 914c4e3e928b
 {{< /highlight >}}
 
 Note the ` --->` commands in between "Steps".  They are indicating when
@@ -68,25 +68,25 @@ unless the build steps change.  Here is the output from the same command as
 above, run again, and with `time` in front:
 
 {{< highlight bash >}}
-    $ time docker build -t steinn/ssh-docker-1 .
-    Sending build context to Docker daemon  2.56 kB
-    Sending build context to Docker daemon
-    Step 0 : FROM debian
-     ---> 61f7f4f722fb
-    Step 1 : ENV DEBIAN_FRONTEND noninteractive
-     ---> Using cache
-     ---> f7fb51a8a0ec
-    Step 2 : RUN apt-get update && apt-get install -y openssh-server
-     ---> Using cache
-     ---> 6172db1d263d
-    Step 3 : CMD mkdir -p /var/run/sshd && exec /usr/sbin/sshd -D
-     ---> Using cache
-     ---> 914c4e3e928b
-    Successfully built 914c4e3e928b
+$ time docker build -t steinn/ssh-docker-1 .
+Sending build context to Docker daemon  2.56 kB
+Sending build context to Docker daemon
+Step 0 : FROM debian
+---> 61f7f4f722fb
+Step 1 : ENV DEBIAN_FRONTEND noninteractive
+---> Using cache
+---> f7fb51a8a0ec
+Step 2 : RUN apt-get update && apt-get install -y openssh-server
+---> Using cache
+---> 6172db1d263d
+Step 3 : CMD mkdir -p /var/run/sshd && exec /usr/sbin/sshd -D
+---> Using cache
+---> 914c4e3e928b
+Successfully built 914c4e3e928b
 
-    real        0m0.236s
-    user        0m0.007s
-    sys 0m0.008s
+real        0m0.236s
+user        0m0.007s
+sys 0m0.008s
 {{< /highlight >}}
 
 
@@ -99,7 +99,7 @@ every machine to unix:///var/run/docker.sock, but can be set via the
 DOCKER_HOST environment variable to another machine, such as:
 
 {{< highlight bash >}}
-    $ export DOCKER_HOST=tcp://192.168.22.8:2375
+$ export DOCKER_HOST=tcp://192.168.22.8:2375
 {{< /highlight >}}
 
 A common approach on OS X machines is to use a set of scripts called
@@ -109,18 +109,18 @@ via virtualbox.  It will even tell you which environment variables to
 export.  See:
 
 {{< highlight bash >}}
-    $ boot2docker up
-    Waiting for VM and Docker daemon to start...
-    .o
-    Started.
-    Writing /Users/ses/.boot2docker/certs/boot2docker-vm/ca.pem
-    Writing /Users/ses/.boot2docker/certs/boot2docker-vm/cert.pem
-    Writing /Users/ses/.boot2docker/certs/boot2docker-vm/key.pem
+$ boot2docker up
+Waiting for VM and Docker daemon to start...
+.o
+Started.
+Writing /Users/ses/.boot2docker/certs/boot2docker-vm/ca.pem
+Writing /Users/ses/.boot2docker/certs/boot2docker-vm/cert.pem
+Writing /Users/ses/.boot2docker/certs/boot2docker-vm/key.pem
 
-    To connect the Docker client to the Docker daemon, please set:
-        export DOCKER_HOST=tcp://192.168.59.103:2376
-        export DOCKER_CERT_PATH=/Users/ses/.boot2docker/certs/boot2docker-vm
-        export DOCKER_TLS_VERIFY=1
+To connect the Docker client to the Docker daemon, please set:
+export DOCKER_HOST=tcp://192.168.59.103:2376
+export DOCKER_CERT_PATH=/Users/ses/.boot2docker/certs/boot2docker-vm
+export DOCKER_TLS_VERIFY=1
 {{< /highlight >}}
 
 

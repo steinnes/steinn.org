@@ -3,7 +3,7 @@ blog:
 
 push: blog
 	cd public && git add -A
-	cd public && git commit -a -m 'rebuilding site'
+	cd public ; git commit -a -m 'rebuilding site' || :
 	cd public && git push origin master
 
 server:
