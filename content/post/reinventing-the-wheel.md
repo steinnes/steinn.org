@@ -20,9 +20,13 @@ UDP packets do not contain a sequence number and the protocol does not
 ack packets.  For practical purposes this means it gets used in scenarios
 where latency is more important than reliability: you prefer to lose some
 packets, rather than adding any overhead of acknowledging packets or waiting
-for packets if they arrive out-of-sequence or get lost on the way.  When
-streaming audio or video it's usually better to drop packets (and thus
-frames) than to stall a live stream or conversation while syncing up.
+for packets if they arrive out-of-sequence or get lost on the way.
+
+When streaming audio or video it's usually better to drop packets (and thus
+frames) than to stall a live stream or conversation while syncing up so
+streaming applications often use UDP, and it is also commonly used as the
+underlying network protocol in FPS games (Quake 3, and probably the other
+Quake games spring to mind).
 
 A major reason for my current love of UDP is because of it's use in StatsD,
 a wonderful protocol developed (afaik) at <a href="https://codeascraft.com/2011/02/15/measure-anything-measure-everything/">Etsy</a>
@@ -32,30 +36,38 @@ who were already using it for monitoring the first single-topic QuizUp
 games.  To make a long story short the fire-and-forget approach to massive
 amounts of statistical data made my heart stir.
 
-Re-inventing the wheel
-----------------------
+A job for UDP!
+--------------
 
 For the last few weeks I've been working on ways to profile and optimize
 <a href="http://redis.io">redis</a> for caching purposes.  The research is
-far from conclusive results, but one of the things I decided to do was to
-patch redis to add a "key sampling" mechanism which fires UDP packets
-containing a key when it gets touched.  To read this data and pipe it into
-an analyzer program I wrote a little C program which listens on a socket
-and writes anything it receives to stdout:
+far from conclusive results, but one of the things we needed to do was find
+an unobtrusive way to monitor key touches in redis.
+
+What we decided to do was to patch it to add a "key sampling" mechanism which
+fires UDP packets containing a key when it gets touched.  This allows us to
+reather cheaply allow an external program to receive a sampling of key touches
+with a minimal performance hit or overhead in redis itself.
+
+To read this data and pipe it into different analyzers, I hacked up a little
+program which listens on an UDP socket and writes anything it receives to
+stdout.  Here's a gist of that program:
 
 {{% gist e017ea610a2ee2872e3a %}}
 
-As you can see I named the gist for this "pointless udp dumper". Why
-pointless? Well because as a close friend pointed out I could have used
-`netcat`.  I am slightly flattered that he said "Ah, I guess you want to
-do something more with this, which is why you don't just use netcat..".
+I named the gist "pointless udp dumper"... so why pointless?
 
-No, I just keep forgetting that netcat supports UDP, and these bytes
-will do the same as my pointless udp dumper, on any machine with netcat:
+Well because as a close friend pointed out I could have used `netcat`.
+My ego was slightly stroked by the fact that he said "Ah, I guess you want
+to do something more complex later, which is why you don't just use netcat..".
+
+But the answer was: No, I just keep forgetting that netcat supports UDP,
+and these eight bytes (excl. the port!) will do the same as my pointless udp
+dumper, on any machine with netcat installed:
 
 {{< highlight bash >}}
 $ nc -l -u 12345
 {{< /highlight >}}
 
-It's fun to re-invent the wheel, but I prefer to do it consciously, and
-for the fun of it.
+It can be fun to re-invent the wheel, but I must admit that I prefer to do
+it consciously :-)
