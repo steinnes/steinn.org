@@ -37,6 +37,6 @@ replayed by something like this:
 By running something like this:
 {{< highlight bash >}}
 $ cat 3600-sec-redis-something.log | python redis-pipe-commands.py
-{{< /highlight }}
+{{< /highlight >}}
 
 Hope this benefits someone (other than my future self :-)
