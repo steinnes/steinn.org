@@ -1,7 +1,7 @@
 +++
 Categories = []
 Description = ""
-Tags = []
+Tags = ["redis"]
 date = "2015-03-19T01:11:52Z"
 title = "redis workload recorder"
 
