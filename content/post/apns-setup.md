@@ -59,7 +59,7 @@ $ openssl req -new \
 5. Convert the .cer file into a PEM file:
 {{< highlight bash >}}
    openssl x509 -in aps_development.cer -inform der -out com.example.app.aps_developement.pem
-{{< /highlight }}
+{{< /highlight >}}
 
 6. Test your key and certificate against APNS:
 {{< highlight bash >}}
