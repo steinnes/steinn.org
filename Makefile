@@ -7,6 +7,6 @@ push: blog
 	cd public && git push origin master
 
 server:
-	hugo server --buildDrafts --watch
+	hugo server --bind=0.0.0.0 --buildDrafts --watch
 
 .phony: blog
