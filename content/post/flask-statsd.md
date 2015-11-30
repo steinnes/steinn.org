@@ -2,7 +2,7 @@
 Categories = []
 Description = "A flask/werkzeug view middleware to emit statsd metrics."
 Tags = []
-date = "2015-10-20T00:58:33Z"
+date = "2015-11-30T09:58:33Z"
 title = "Flask and StatsD"
 draft = true
 
@@ -73,6 +73,21 @@ The second assumption is that the only dynamic parts of a URL are UUIDs.  Look a
 to replace any UUID's in the URL string with `id`.  Probably a more robust approach
 would be to parse the request path and construct it out of safe characters found
 between slashes.  I'll fix these things once I make an actual flask module out of this.
+
+The code above includes a couple of little extras:
+
+- `StatsD`: a statsd wrapper I wrote to automatically add certain tags to all metrics
+emitted.  That's something I've done before, and not really related to Flask or Werkzeug,
+but we are using this at Takumi so I decided to include it.
+- `get_cpu_time`: the middleware and the context manager both always retrieve the actual
+cpu time and submit that as a separate metric.  This is a neat little trick I suppose most
+devops people will be used to, and is a great indicator of both wasted cpu cycles and external
+bottlenecks.
+
+
+The way you'd use the code above would be like so:
+
+{{% gist ebe4b170a46b3b74d7da %}}
 
 We launched Takumi on the 11th of November and we're using this code in production,
 and alhtough I have a nagging suspicion I'll discover some unpaid price for this magic,
