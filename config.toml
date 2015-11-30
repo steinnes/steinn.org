@@ -4,6 +4,9 @@ title = "steinn.org"
 theme = "lakkris"
 pygmentsstyle = "monokai"
 
+[params]
+    gaCode = "UA-66867767-1"
+
 [[menu.main]]
     name = "about"
     weight = -10

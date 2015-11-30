@@ -94,7 +94,7 @@ in python: <a href="http://github.com/steinnes/apnsend">apnsend</a>.
 $ git clone git@github.com:steinnes/apnsend.git
 $ cd apnsend
 $ make 
-$ venv/bin/apnsend apns_com.example.app_combined.pem token "hello from apnsend"
+$ venv/bin/apnsend apns_com.example.app_combined.pem token "hello from apnsend" -s
 {{< /highlight >}}
 
 The script takes as a parameter the PEM file containing your key and the
