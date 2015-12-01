@@ -29,7 +29,7 @@ and <a href="http://www.datadog.com">Datadog</a> is my preferred service for
 making those metrics visible and reacting to them.  We generally did this
 using a combination of two techniques:
 
-1. A fairly ingenious view decorator which took the metric name as a paremeter,
+1. A fairly ingenious view decorator which took the metric name as a parameter,
 wrapped a Flask view and and emitted a statsd timing for the view.  Instant
 visibility into your view latencies!  I credit <a href="https://twitter.com/johannth">Jói</a>,
 the CTO of QuizUp for this.  He's an amazing developer and generally one of the
