@@ -4,7 +4,6 @@ Description = "A flask/werkzeug view middleware to emit statsd metrics."
 Tags = []
 date = "2015-11-30T09:58:33Z"
 title = "Flask and StatsD"
-draft = true
 
 +++
 
@@ -27,8 +26,8 @@ But it's always possible to tweak, and that's what this blog post is about.
 At QuizUp, one of the lessons I learned, and I've openly <a href="https://speakerdeck.com/steinnes/quizup-zero-to-a-million-users-in-8-days?slide=16">spoken of</a>
 is the importance of metrics and instrumenting code, specifically using StatsD
 and <a href="http://www.datadog.com">Datadog</a> is my preferred service for
-making those metrics visible and reacting to them.  The way we did this there
-was mainly in two ways:
+making those metrics visible and reacting to them.  We generally did this
+using a combination of two techniques:
 
 1. A fairly ingenious view decorator which took the metric name as a paremeter,
 wrapped a Flask view and and emitted a statsd timing for the view.  Instant
@@ -62,33 +61,35 @@ StatsD MiddleWare for Flask.:
 
 {{% gist 32aad08050f642245dd1 %}}
 
-This code assumes a couple of things, first that the app name is `takumi`.  This
-could easily be changed by supplying the actual Flask app instead of the wsgi_app,
-to the middleware constructor, and then relying on `self.app.name`.  Also it might
-be a good idea to use that prefix for all metrics, to be able to use this middleware
-for multiple Flask apps all sending metrics to the same statsd service (such as Datadog).
-
-The second assumption is that the only dynamic parts of a URL are UUIDs.  Look at
-`def _metric_name_from_path` for details, but there I basically use a regular expression
-to replace any UUID's in the URL string with `id`.  Probably a more robust approach
-would be to parse the request path and construct it out of safe characters found
-between slashes.  I'll fix these things once I make an actual flask module out of this.
+There's one pretty big assumption here, which is that the all dynamic parts of
+a URL are UUIDs.  Look at `def _metric_name_from_path` for details, but there
+I basically use a regular expression to replace any UUID's in the URL string
+with `id`.  Probably a more robust approach would be to parse the request path
+and construct it out of safe characters found between slashes.  I'll see if
+there's a smarter way if I make a proper flask plugin out of this.
 
 The code above includes a couple of little extras:
 
-- `StatsD`: a statsd wrapper I wrote to automatically add certain tags to all metrics
-emitted.  That's something I've done before, and not really related to Flask or Werkzeug,
-but we are using this at Takumi so I decided to include it.
-- `get_cpu_time`: the middleware and the context manager both always retrieve the actual
-cpu time and submit that as a separate metric.  This is a neat little trick I suppose most
-devops people will be used to, and is a great indicator of both wasted cpu cycles and external
-bottlenecks.
+- `StatsD`: a statsd wrapper I wrote to automatically add certain tags to all
+metrics emitted.  That's something I've done before, and not really related to
+Flask or Werkzeug, but we are using this at Takumi so I decided to include it.
+- `get_cpu_time`: the middleware and the context manager both always retrieve
+the actual cpu time and submit that as a separate metric.  This is a neat
+little trick I suppose most devops people will be used to, and can be very
+helpful to detect both wasted cpu cycles and external bottlenecks.
 
-
-The way you'd use the code above would be like so:
+Here's a minimal example of how to use the middleware:
 
 {{% gist ebe4b170a46b3b74d7da %}}
 
-We launched Takumi on the 11th of November and we're using this code in production,
-and alhtough I have a nagging suspicion I'll discover some unpaid price for this magic,
-we are seeing metrics for all of our views completely automatically :-)
+To time specific blocks of your code you can import `TimingStats` and use it
+directly:
+{{% gist 2cd21b3fa2877cdf8ac4 %}}
+
+We launched Takumi on the 11th of November and we're using this code in
+production, and although I have a nagging suspicion I'll discover some unpaid
+price for this magic, we are seeing metrics for all of our views completely
+automatically :-)
+
+For convenience sake if anyone wants to use this stuff, here's a github repo:
+<a href="https://github.com/steinnes/statsdmiddleware">github.com/steinnes/statsdmiddleware</a>.
