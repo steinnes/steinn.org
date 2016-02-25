@@ -7,10 +7,10 @@ title = "ebenv: Elastic Beanstalk environment copy/dump tool"
 
 +++
 
-At Takumi we use Elastic Beanstalk, which is a nice API/service from AWS
-which strikes a decent balance between a heroku-esque simplified service
-interface for developers, and the hands-on control required by those of
-the devops persuasion, such as myself.
+At <a href="http://takumi.com">Takumi</a> we use Elastic Beanstalk, which
+is a nice API/service from AWS which strikes a decent balance between a
+heroku-esque simplified service interface for developers, and the hands-on
+control required by those of the devops persuasion, such as myself.
 
 One of the main benefits of using Elastic Beanstalk is how quick and easy
 it is to spin up new environments, and I make heavy use of that in my work.
