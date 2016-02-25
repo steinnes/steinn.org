@@ -4,6 +4,7 @@ Description = ""
 Tags = ["docker", "codeship", "ci", "cd", "aws", "elasticbeanstalk"]
 date = "2016-02-24T20:57:15Z"
 title = "Continuous delivered Dockers via Codeship + Elastic Beanstalk"
+draft = true
 
 +++
 

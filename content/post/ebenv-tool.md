@@ -62,8 +62,14 @@ with <a href="https://github.com/gxela/awsebcli">awsebcli</a>, and these
 forementioned issues were popping up once in a while.
 
 I decided to finally do something about it and I wrote <a href="https://github.com/steinnes/ebenv">ebenv</a>.
+You can install it via pip (`pip install ebenv`) or find it on <a 
+href="https://github.com/steinnes/ebenv">github.com/steinnes/ebenv</a>.
 
 Currently it can handle issues 1-3 here above, and I'm planning to add
 counterpart commands to the `env` and `envdir` commands to easily sync
 local changes (which might even be maintained in a *gasp* repository!)
 with a remote Elastic Beanstalk environment.
+
+If you also use Elastic Beanstalk, I hope ebenv can be of some use to you,
+I certainly longed for a tool of this nature for a while before finally
+writing it ;-)
