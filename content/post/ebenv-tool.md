@@ -14,7 +14,7 @@ the devops persuasion, such as myself.
 
 One of the main benefits of using Elastic Beanstalk is how quick and easy
 it is to spin up new environments, and I make heavy use of that in my work.
-Basically what I find relatively often useful is the ability to copying an
+Basically what I find relatively often useful is the ability to copy an
 existing environment to test new code with the same configuration and
 resources, with a limited set of clients.  Reasons to do that might be;
 
@@ -34,8 +34,12 @@ One thing though that slightly bugged me when dealing with Elastic Beanstalk
 was the fact that there was no programmatic way of doing the following:
 
 1. Dump the environment variables for an app env to an envfile, usable by
-   `foreman`, `honcho` or similar tools
-2. Same as *1* but an envdir, usable by `envdir`, `chpst` or similar tools
+   <a href="http://ddollar.github.io/foreman/">foreman</a>, <a
+   href="https://github.com/nickstenning/honcho">honcho</a>
+   or similar tools
+2. Same as *1* but an envdir, usable by <a
+   href="https://cr.yp.to/daemontools/envdir.html">envdir</a>, <a
+   href="http://smarden.org/runit/chpst.8.html">chpst</a> or similar tools
 3. Copy the environment variables (config) from one environment to another
 4. Load the environment variables in an envfile or an envdir into an
    existing EB environment
@@ -55,14 +59,16 @@ being able to actually *clone* the environments.
 
 Another semi-common issue I encountered was dumping values from an existing
 environment, in order to start a server locally or on another instance using
-the same configuration.  Intermittently over the last few months I'd been
-missing a tool to deal with EB environments programmatically, partially
-because we have a decent amount of configuration values which don't play nice
-with <a href="https://github.com/gxela/awsebcli">awsebcli</a>, and these
-forementioned issues were popping up once in a while.
+the same configuration.  Basically, over the last few months I'd been
+intermittently wishing for a tool to deal with EB environment configs more
+programmatically, partially because we have a decent amount of configuration
+values which don't play nice with <a
+href="https://github.com/gxela/awsebcli">awsebcli</a>, but also because of
+the other issues I described already.
 
-I decided to finally do something about it and I wrote <a href="https://github.com/steinnes/ebenv">ebenv</a>.
-You can install it via pip (`pip install ebenv`) or find it on <a 
+I decided to finally do something about it and I wrote <a
+href="https://github.com/steinnes/ebenv">ebenv</a>.  You can install it via pip
+(`pip install ebenv`) or find it on <a
 href="https://github.com/steinnes/ebenv">github.com/steinnes/ebenv</a>.
 
 Currently it can handle issues 1-3 here above, and I'm planning to add
