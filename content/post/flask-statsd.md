@@ -61,12 +61,15 @@ StatsD MiddleWare for Flask.:
 
 {{% gist 32aad08050f642245dd1 %}}
 
-There's one pretty big assumption here, which is that the all dynamic parts of
+<s>There's one pretty big assumption here, which is that the all dynamic parts of
 a URL are UUIDs.  Look at `def _metric_name_from_path` for details, but there
 I basically use a regular expression to replace any UUID's in the URL string
 with `id`.  Probably a more robust approach would be to parse the request path
 and construct it out of safe characters found between slashes.  I'll see if
-there's a smarter way if I make a proper flask plugin out of this.
+there's a smarter way if I make a proper flask plugin out of this.</s>
+Update: I rewrote the metric name construction to use the Flask app's URL map.
+See <a href="/post/flask-statsd-revisited/">this post</a> for details :-)
+
 
 The code above includes a couple of little extras:
 
