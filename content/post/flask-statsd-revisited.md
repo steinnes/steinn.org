@@ -7,8 +7,8 @@ title = "Flask and StatsD revisited"
 
 +++
 
-A couple of months ago I wrote about automatically emitting <a href="http://steinn.org/post/flask-statsd/">
-statsd metrics</a> for Flask views using a <a hre_f="http://werkzeug.pocoo.org/">Werkzeug</a>
+A couple of months ago I wrote about <a href="http://steinn.org/post/flask-statsd/">automatically emitting</a>
+statsd metrics for Flask views using a <a hre_f="http://werkzeug.pocoo.org/">Werkzeug</a>
 middleware.
 
 There was one rather large caveat though: how I dealt with dynamic URL
