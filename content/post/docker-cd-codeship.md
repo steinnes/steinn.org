@@ -4,14 +4,34 @@ Description = ""
 Tags = ["docker", "codeship", "ci", "cd", "aws", "elasticbeanstalk"]
 date = "2016-03-23T09:57:15Z"
 title = "Continuous delivered Dockers via Codeship + Elastic Beanstalk"
-draft = true
 
 +++
 
-At Takumi we've been using AWS Elastic Beanstalk for our different app
-environments for a variety of reasons.  Most importantly EB solves a lot
-of problems straight out of the box, with minimal effort and a low learning
-curve for most developers:
+At Takumi we recently started deploying immutable pre-built docker containers
+through our CI system, onto our AWS Elastic Beanstalk nodes, while keeping
+the deployment procedure as simple as:
+
+{{< highlight shell-session >}}
+takumi-server (feature-branch) $ git commit -m "Important feature"
+[feature-branch cf7edb2] Important feature
+takumi-server (feature-branch) $ git push origin feature-branch
+{{< /highlight >}}
+
+... wait for codeship build
+
+{{< highlight shell-session >}}
+takumi-server (feature-branch) $ cd ../takumi-deployment
+takumi-deployment (master) $ dpl deploy takumi-server git_cf7edb2 takumi-server-dev
+Deploying 'takumi-server:git_cf7edb2' to 'takumi-server-dev'
+...
+{{< /highlight >}}
+
+<!--more-->
+
+We've been using AWS Elastic Beanstalk for our different app environments
+for a variety of reasons.  Most importantly EB solves a lot of problems
+straight out of the box, with minimal effort and a low learning curve fo
+ most developers:
 
 - Autoscale groups + ELB for scale and redundancy
 - Deploy git commits and branches with easy CLI commands
@@ -43,7 +63,7 @@ If you set your EB environment type to one of the Docker types, and a
 `Dockerfile` is found in your project root, then upon deployment EB will
 run something akin to:
 
-{{< highlight bash >}}
+{{< highlight shell-session >}}
 $ docker build -t aws_beanstalk/staging-app .
 $ docker run -d aws_beanstalk/staging-app
 {{< /highlight >}}
@@ -52,7 +72,7 @@ In addition to this, EB will inspect the newly started docker and generate
 an upstream configuration file for nginx, pointing to the local docker and
 the port defined by it's `EXPOSE` line:
 
-{{< highlight bash >}}
+{{< highlight shell-session >}}
 $ cat elasticbeanstalk-nginx-docker-upstream.conf
 upstream docker {
 	server 172.17.0.5:5000;
@@ -119,7 +139,7 @@ first cut.  It basically performs the following steps:
 4. Stages it for commit
 5. Deploys the current project to the specified EB app and environment using `--staged`.
 
-{{< highlight bash >}}
+{{< highlight shell-session >}}
 (venv) $ dpl deploy takumi-server git_$GITHASH takumi-server-dev
 Deploying 'takumi-server:git_$GITHASH' to 'takumi-srv-dev'
 ...
@@ -192,6 +212,8 @@ _push docker_ and it specifies how to tag and push the docker built by our
 `app` service.  Finally we have a _deployment_ step which runs an instance of
 our `deployment` service, with the command required to trigger a deployment.
 
+{{< figure src="http://static.steinn.org/blog/post/codeship-cd-build-success.png" title="Pull request merged to master and deployed to dev" >}}
+
 ## Developing Steps
 
 When developing these steps I found that Codeship's <a href="https://codeship.com/documentation/docker/installation/">
@@ -200,7 +222,7 @@ pushes to GitHub to trigger builds which fail after a few minutes.  Installing
 Jet and being able to execute the steps locally and figure out any errors in
 our step or service definitions within a seconds was a huge help:
 
-{{< highlight bash >}}
+{{< highlight shell-session >}}
 $ jet steps
 ...
 {{< /highlight >}}
