@@ -30,8 +30,8 @@ Deploying 'takumi-server:git_cf7edb2' to 'takumi-server-dev'
 
 We've been using AWS Elastic Beanstalk for our different app environments
 for a variety of reasons.  Most importantly EB solves a lot of problems
-straight out of the box, with minimal effort and a low learning curve fo
- most developers:
+straight out of the box, with minimal effort and a low learning curve for
+most developers:
 
 - Autoscale groups + ELB for scale and redundancy
 - Deploy git commits and branches with easy CLI commands
