@@ -7,7 +7,7 @@ title = "Continuous delivered Dockers via Codeship + Elastic Beanstalk"
 
 +++
 
-At Takumi we recently started deploying immutable pre-built docker containers
+At <a href="http://takumi.com/">Takumi</a> we recently started deploying immutable pre-built docker containers
 through our CI system, onto our AWS Elastic Beanstalk nodes, while keeping
 the deployment procedure as simple as:
 
