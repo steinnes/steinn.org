@@ -117,7 +117,7 @@ need?
    We decided to use ECR (Elastic Container Registry) because since January
    16th they are natively supported by Elastic Beanstalk.  We tag all of our
    builds with the githash (accessible as `$CI_COMMIT_ID` from within codeship
-   containers.
+   containers).
 3. Only push and tag container images which pass tests, appropriately for
    deployment or use further in your pipeline. We chose not to push any failing
    containers to ECR.  That's easy using Codeship's `codeship-steps.yml`.
