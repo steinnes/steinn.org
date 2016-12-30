@@ -1,0 +1,110 @@
++++
+Categories = []
+Description = ""
+Tags = []
+date = "2016-12-29T15:18:23Z"
+title = "Terminating IPv6 on AWS"
+draft = true
+
++++
+
+## Background
+
+This summer Apple announced that they would require all apps submitted to the
+App Store to support IPv6.  At Takumi we were not concerned, as in the
+past I had noticed Amazon ELB's have both AAAA records and a nice
+"dualstack" DNS name which had both A records and AAAA records for the
+underlying hosts -- and the Takumi API is accessed through an AWS ELB.
+
+Then about a month ago we got our first app rejection because our API was not
+reachable in an IPv6-only network Apple have setup for testing.  To my surprise
+and despair there were no AAAA records, or a "dualstack" DNS name on any
+of our ELBs.  Also I was surprised because our DNS setup did not include any
+AAAA records, so it seems Apple was testing this without using a DNS64/NAT64
+network.
+
+Quickly I found out that the reason for this is that the Virtual Private Cloud
+offering of AWS does not support IPv6 (some support has been rolled out now
+in select regions), and I surmise that any resources created to wrap publicly
+accessible VPC instances are thus IPv4-only as well.  All of our ELB's and ALB's
+have only A records, and no AAAA records associated with their DNS names.
+
+To sum up: because we are a new customer of AWS, we are forced to use the VPC
+offering, which replaces EC2-Classic (as it's now known), and this newer
+compute cloud does not support IPv6, which there is growing pressure around
+the internet to fully support.  I was not pleased.
+
+## First solution
+
+My first solution was to find a cloud provider which would give me a publicly
+accessible (IPv4 and IPv6) machine, and Digital Ocean became the provider of
+choice.  I setup a debian machine there, an nginx proxy listening on the IPv6
+interface and proxying to IPv4 backends using our ELB CNAME.
+
+{{< figure src="http://static.steinn.org/blog/post/aws-cf-ipv6-1.png" title="Workaround solution using DO proxy" >}}
+
+## Caveats
+
+While a quick and easy solution for most engineers to implement, this solution
+is both complex as it requires more moving parts and introduces a single point
+of failure in another datacenter with another provider -- although the proxy is
+only used for IPv6.  More alarmingly though, because it is not possible to create
+multiple DNS records with the same name with both CNAME and A/AAAA record types,
+I had to hardcode the ELB IP addresses as A-records on api.takumi.com, while the
+AAAA record pointed to the IPv6 address of the proxy.
+
+This meant that if AWS changes the IP addresses of our ELB, which they might do
+at any moment and actively discourage any reliance on them, instead providing their
+own DNS names which should be accessed via CNAME entries from customer hostnames;
+our users would be stuck accessing outdated IP addresses which might not even
+answer, and certainly wouldn't route traffic to our actual cloud servers.
+
+A real solution would be to get a single DNS hostname from Amazon which would
+contain both IPv6 and IPv4 (AAAA and A records) which will reliably reach our
+load balancers, without the need to monitor for IP address changes, or add new
+proxy machines to our operational environment!
+
+## CloudFront to the Rescue
+
+After consulting with a friend who's an engineer with Amazon the simplest
+solution (with the added benefit of giving us lower latencies and DDoS
+protection) would be to setup a non-caching CloudFront distribution, the origin
+of which would be our production Elastic Load Balancer.  When creating a
+CloudFront distribution it is possible to enable IPv6, and by allowing all HTTP
+methods, and choosing to forward `All` HTTP hedars, and to forward all cookies
+and query string parameters, you've created a non-caching IPv6 accessible
+CloudFront distribution.
+
+{{< figure src="http://static.steinn.org/blog/post/aws-cf-ipv6-cf-config-1.png" title="CloudFront Default Cache Behavior Settings" >}}
+
+{{< figure src="http://static.steinn.org/blog/post/aws-cf-ipv6-cf-config-1.png" title="CloudFront Distribution Settings" >}}
+
+
+## Migrating
+
+Since the new setup means having a CDN in front of our API, which essentially
+means deploying a distributed caching system in front of an API which almost
+by definition can be dangerous to cache accidentally, and we also rely on our
+own custom HTTP headers for identifying different client platforms and versions.
+
+In short: I don't want to switch all of our traffic onto CloudFront in one go
+as some insidious bugs might surface, and due to the aggressive caching and
+TTL ignoring of many large ISPs and DNS providers, the fallout could be rather
+painful.
+
+To migrate gradually to our new CloudFront distribution I then decided to change
+our main API DNS entry to a set of weighted records, starting with 99% of lookups
+receiving my workaround solution, and 1% the new CloudFront distribution.
+
+{{< figure src="http://static.steinn.org/blog/post/aws-cf-ipv6-2.png" title="Migrating to the new setup" >}}
+
+In a few days, if we have no issues with the new setup we can change the weights
+on those records to gradually move more traffic over to CloudFront, or all at once.
+
+The final setup will then be like this, and on top of getting the IPv6 support we
+need to avoid any random rejections at Apple, we'll also benefit from better
+latencies and we are in a stronger position to deal with any DDoS attacks as well.
+
+{{< figure src="http://static.steinn.org/blog/post/aws-cf-ipv6-3.png" title="New setup using CloudFront" >}}
+
+Not
