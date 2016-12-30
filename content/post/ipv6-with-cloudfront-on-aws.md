@@ -2,9 +2,8 @@
 Categories = []
 Description = ""
 Tags = []
-date = "2016-12-29T15:18:23Z"
+date = "2016-12-30T13:42:23Z"
 title = "Terminating IPv6 on AWS"
-draft = true
 
 +++
 
