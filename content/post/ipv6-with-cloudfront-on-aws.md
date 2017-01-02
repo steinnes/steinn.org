@@ -120,7 +120,7 @@ CloudFront distribution.
 >}}
 
 {{< figure
-	src="http://static.steinn.org/blog/post/aws-cf-ipv6-cf-config-1.png"
+	src="http://static.steinn.org/blog/post/aws-cf-ipv6-cf-config-2.png"
 	title="CloudFront Distribution Settings"
 	caption="Relevant sections highlighted in red"
 >}}
