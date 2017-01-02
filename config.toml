@@ -1,4 +1,4 @@
-baseurl = "http://steinn.org"
+baseurl = "https://steinn.org"
 languageCode = "en-us"
 title = "steinn.org"
 theme = "lakkris"
